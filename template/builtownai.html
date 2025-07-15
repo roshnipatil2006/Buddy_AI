@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat to AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #000;
+        color: #fff;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        }
+
+        main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        background: #0d0d0d;
+        color: #e0e0e0;
+        width: 100%;
+        }
+
+        header {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #a78bfa;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        position: relative;
+        user-select: none;
+        }
+
+        header::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -8px;
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
+        transform: translateX(-50%);
+        border-radius: 2px;
+        animation: moveLine 3s linear infinite;
+        }
+
+        @keyframes moveLine {
+        0% { transform: translateX(-50%) translateX(0); }
+        50% { transform: translateX(-50%) translateX(5px); }
+        100% { transform: translateX(-50%) translateX(0); }
+        }
+
+        #chat-container {
+        width: 100%;
+        max-width: 800px;
+        height: 550px;
+        background: #121212;
+        border-radius: 16px;
+        box-shadow: 0 0 15px #4c1d95;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        user-select: none;
+        }
+
+        #messages {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding-right: 10px;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        background-color: #0d0d0d;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        }
+
+        #messages::-webkit-scrollbar {
+        width: 8px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+        background-color: #9333ea;
+        border-radius: 8px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+        background: transparent;
+        }
+
+        .message {
+        max-width: 60%;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        font-size: 1rem;
+        line-height: 1.3;
+        position: relative;
+        animation: fadeInUp 0.4s ease forwards;
+        display: inline-block;
+        word-wrap: break-word;
+        word-break: break-word;
+        }
+
+        @keyframes fadeInUp {
+        0% {opacity: 0; transform: translateY(15px);}
+        100% {opacity: 1; transform: translateY(0);}
+        }
+
+        .user-message {
+        background: rgba(147, 51, 234, 0.25);
+        border: 1px solid rgba(147, 51, 234, 0.5);
+        color: #984ee8;
+        align-self: flex-end;
+        box-shadow: 0 0 15px #9333ea;
+        text-align: right;
+        }
+
+        .user-message p:first-child {
+        font-weight: 600;
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+        color: #c084fc;
+        }
+
+        .bot-message {
+        background: rgba(6, 182, 212, 0.18);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #81e6d9;
+        align-self: flex-start;
+        box-shadow: 0 0 15px #06b6d4;
+        text-align: left;
+        }
+
+        .bot-message p:first-child {
+        font-weight: 600;
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+        color: #22d3ee;
+        }
+
+        #input-area {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        }
+
+        #user-input {
+        flex-grow: 1;
+        padding: 0.75rem 1rem;
+        border-radius: 9999px;
+        border: 1px solid #4c1d95;
+        background-color: #1e1e1e;
+        color: #ddd;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        outline: none;
+        resize: none;
+        min-height: 40px;
+        max-height: 100px;
+        overflow-y: hidden;
+        }
+
+        #user-input::placeholder {
+        color: #555;
+        }
+
+        #user-input:focus {
+        border-color: #a78bfa;
+        box-shadow: 0 0 8px #a78bfa;
+        }
+
+        #send-btn {
+        background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
+        color: white;
+        font-weight: 700;
+        border-radius: 9999px;
+        padding: 0 1.25rem;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 0 0 10px #9333ea;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        min-width: 48px;
+        height: 40px;
+        }
+
+        #send-btn:hover {
+        background: linear-gradient(90deg, #ec4899, #8b5cf6, #06b6d4);
+        box-shadow: 0 0 15px #ec4899;
+        }
+
+        .shape {
+        position: fixed;
+        border: 2px solid rgba(255 255 255 / 0.15);
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(1px);
+        animation: floaty 20s ease-in-out infinite alternate;
+        z-index: 5;
+        }
+
+        .shape.triangle {
+        width: 0;
+        height: 0;
+        border-left: 40px solid transparent;
+        border-right: 40px solid transparent;
+        border-bottom: 70px solid rgba(255 255 255 / 0.15);
+        border-radius: 0;
+        animation: floaty 25s ease-in-out infinite alternate;
+        }
+
+        .shape.ellipse {
+        border-radius: 50% 25%;
+        }
+
+        @keyframes floaty {
+        0%   { transform: translate(0, 0) rotate(0deg); }
+        50%  { transform: translate(30px, -20px) rotate(180deg); }
+        100% { transform: translate(0, 0) rotate(360deg); }
+        }
+    </style>
+
+</head>
+<body>
+    <a href="{% url 'home' %}" class="fixed top-4 left-4 z-50 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:shadow-pink-500 transition duration-300">
+        ← Back to Home
+    </a>
+
+    <main>
+        <header>Your Own AI </header>
+            <section id="chat-container">
+                <div id="messages"></div>
+
+                <div id="input-area">
+                    <textarea id="user-input" placeholder="Type your message here..." autocomplete="off" spellcheck="false" rows="1"></textarea>
+                    <button onclick="sendMessage()" id="send-btn" title="Send message">🚀</button>
+                </div>
+            </section>
+    </main>
+
+    <!-- Floating shapes -->
+    <div class="shape" style="top: 15%; left: 10%; width: 100px; height: 100px;"></div>
+    <div class="shape ellipse" style="top: 60%; left: 75%; width: 140px; height: 90px;"></div>
+    <div class="shape" style="bottom: 20%; left: 45%; width: 180px; height: 180px;"></div>
+    <div class="shape triangle" style="top: 30%; left: 30%;"></div>
+    <div class="shape" style="bottom: 10%; right: 12%; width: 90px; height: 90px;"></div>
+    <div class="shape ellipse" style="top: 25%; right: 20%; width: 160px; height: 100px;"></div>
+
+
+    <script>
+        function toggleSettings() {
+            const settingsPanel = document.getElementById('settings-panel');
+            settingsPanel.classList.toggle('hidden');
+        }
+
+        // Change the temperature value
+        function changeTemperature(delta) {
+            const temperatureValue = document.getElementById('temperature-value');
+            let currentValue = parseFloat(temperatureValue.textContent);
+            currentValue = Math.max(0.1, Math.min(2.0, currentValue + delta)); // Clamp between 0.1 and 2.0
+            temperatureValue.textContent = currentValue.toFixed(1);
+        }
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            const messages = document.getElementById('messages');
+
+            if (!userInput) return; // Prevent empty messages
+
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('user-message');
+            userMessage.classList.add('message');
+            userMessage.innerHTML = `
+                <p >${userInput}</p>
+                
+            `;
+            messages.appendChild(userMessage);
+
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+
+            // Simulate sending to server and receiving response
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: new URLSearchParams({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Add bot response
+                const botMessage = document.createElement('div');
+                botMessage.classList.add('bot-message');
+                botMessage.classList.add('message');
+                botMessage.innerHTML = `
+                    <p c>${data.response}</p>
+                `;
+                messages.appendChild(botMessage);
+
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+            })
+            .catch(() => {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'text-left max-w-xs bg-red-100 rounded-lg p-3 shadow-md text-red-800';
+                errorMessage.textContent = 'Error: Unable to fetch response.';
+                messages.appendChild(errorMessage);
+            });
+
+            // Clear input field
+            document.getElementById('user-input').value = '';
+        }
+    </script>
+</body>
+</html>
