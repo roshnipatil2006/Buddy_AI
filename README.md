@@ -31,6 +31,28 @@ Upload a PDF and ask questions — powered by Retrieval-Augmented Generation.
 
 ---
 
+## 🔹 Some Other Pages : 
+
+
+### 1. 💬 Home Page 
+Simple and Engaging Home Page.
+
+![Home_Page](./template/home.png)
+
+---
+
+### 2. 🛠️ Sign_In 
+
+![Sign_In](./template/sign_in.png) 
+
+---
+
+### 3. 📄 Sign_Up  
+
+![Chat with PDF](./template/sign_up.png)
+
+---
+
 ## 🧰 Tech Stack
 
 - **Frontend:** HTML, Tailwind CSS, JavaScript  
