@@ -49,7 +49,7 @@ Simple and Engaging Home Page.
 
 ### 3. 📄 Sign_Up  
 
-![Chat with PDF](./template/sign_up.png)
+![Chat with PDF](./template/sing_up.png)
 
 ---
 
