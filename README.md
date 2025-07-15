@@ -1,6 +1,9 @@
 # 🤖 Buddy AI — Your Personalized AI Companion
 
-**Buddy AI** is a smart and flexible AI assistant built with modern technologies. It offers a seamless way to interact with AI in three powerful modes:
+**| Work As A Frontend Developer 💻✨ |**
+
+---
+**Buddy AI** is a smart, flexible, and user-friendly AI companion built to empower users with modern AI capabilities — all in one sleek interface. Whether you're chatting with AI, creating your own custom assistant, or uploading a PDF for intelligent Q\&A, Buddy AI delivers a seamless experience.It is a smart and flexible AI assistant built with modern technologies. It offers a seamless way to interact with AI in three powerful modes:
 
 ---
 
@@ -37,4 +40,4 @@ Upload a PDF and ask questions — powered by Retrieval-Augmented Generation.
 ---
 
 ## 📱 Connect with Me  
-🐦 Twitter: [@YogyashriPatil](https://x.com/YogyashriP)
+🐦 LinkdIn: [@RoshniPatil](https://www.linkedin.com/in/roshni-patil-04881528b/)
